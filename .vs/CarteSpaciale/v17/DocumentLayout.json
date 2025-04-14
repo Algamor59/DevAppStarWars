@@ -1,0 +1,68 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "G:\\JEUX\\unity\\projets\\CarteSpaciale\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|g:\\jeux\\unity\\projets\\cartespaciale\\assets\\scripts\\pathfinder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\scripts\\pathfinder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{91EDCAD7-265B-A113-D09B-466C7A5E210D}|Assembly-CSharp.csproj|G:\\JEUX\\unity\\projets\\CarteSpaciale\\assets\\scripts\\customelinedotted.shader||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{91EDCAD7-265B-A113-D09B-466C7A5E210D}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\customelinedotted.shader||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|G:\\JEUX\\unity\\projets\\CarteSpaciale\\Assets\\HeyBlairGames\\PlanetTextureGenerator\\Editor\\PlanetNoiseGenerator.compute||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\HeyBlairGames\\PlanetTextureGenerator\\Editor\\PlanetNoiseGenerator.compute||{8B382828-6202-11D1-8870-0000F87579D2}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PathFinder.cs",
+              "DocumentMoniker": "G:\\JEUX\\unity\\projets\\CarteSpaciale\\Assets\\Scripts\\PathFinder.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\PathFinder.cs",
+              "ToolTip": "G:\\JEUX\\unity\\projets\\CarteSpaciale\\Assets\\Scripts\\PathFinder.cs",
+              "RelativeToolTip": "Assets\\Scripts\\PathFinder.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAMAAAAfAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-14T16:21:27.359Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "CustomeLineDotted.shader",
+              "DocumentMoniker": "G:\\JEUX\\unity\\projets\\CarteSpaciale\\Assets\\Scripts\\CustomeLineDotted.shader",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\CustomeLineDotted.shader",
+              "ToolTip": "G:\\JEUX\\unity\\projets\\CarteSpaciale\\Assets\\Scripts\\CustomeLineDotted.shader",
+              "RelativeToolTip": "Assets\\Scripts\\CustomeLineDotted.shader",
+              "ViewState": "AQIAAA8AAAAAAAAAAAAAwC8AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002777|",
+              "WhenOpened": "2025-04-14T10:45:57.678Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PlanetNoiseGenerator.compute",
+              "DocumentMoniker": "G:\\JEUX\\unity\\projets\\CarteSpaciale\\Assets\\HeyBlairGames\\PlanetTextureGenerator\\Editor\\PlanetNoiseGenerator.compute",
+              "RelativeDocumentMoniker": "Assets\\HeyBlairGames\\PlanetTextureGenerator\\Editor\\PlanetNoiseGenerator.compute",
+              "ToolTip": "G:\\JEUX\\unity\\projets\\CarteSpaciale\\Assets\\HeyBlairGames\\PlanetTextureGenerator\\Editor\\PlanetNoiseGenerator.compute",
+              "RelativeToolTip": "Assets\\HeyBlairGames\\PlanetTextureGenerator\\Editor\\PlanetNoiseGenerator.compute",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002777|",
+              "WhenOpened": "2025-04-14T09:05:15.933Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
