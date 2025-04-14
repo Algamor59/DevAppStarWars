@@ -1,21 +1,56 @@
-Temp/
+# ========== UNITY ==========
+
 [Ll]ibrary/
 [Tt]emp/
 [Oo]bj/
 [Bb]uild/
 [Bb]uilds/
 [Ll]ogs/
+[Mm]emoryCaptures/
 [Uu]serSettings/
-MemoryCaptures/
+
+# Rider
+.idea/
+*.sln
 *.csproj
 *.unityproj
-*.sln
-*.suo
-*.tmp
-*.user
-*.userprefs
 *.pidb
 *.booproj
 *.svd
-*.pdb
+*.user
+*.userprefs
+
+# VS Code
+.vscode/
+
+# OS
 .DS_Store
+Thumbs.db
+
+# Auto-generated
+*.tmproj
+*.pdb
+*.mdb
+*.opendb
+*.bak
+
+# Unity Cloud Build
+.cloud/
+
+# Crashlytics / Analytics
+*.crashlytics
+*.log
+*.report
+
+# Gradle / Android
+.gradle/
+*.apk
+*.aar
+*.dex
+*.class
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+
