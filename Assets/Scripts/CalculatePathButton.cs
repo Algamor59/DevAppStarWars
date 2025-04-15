@@ -1,10 +1,15 @@
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class CalculatePathButton : MonoBehaviour
 {
     public Material optimalPathMaterial;
     private PlanetConnections planetConnections;
+    public TextMeshProUGUI totalDistanceLabel; // Le champ UI pour afficher la distance totale
+
+    public TextMeshProUGUI distanceDetailsLabel; // Champ pour le détail
+
 
     void Start()
     {
@@ -19,8 +24,9 @@ public class CalculatePathButton : MonoBehaviour
             return;
         }
 
-        // Réinitialiser tous les chemins visuels
+        // Réinitialiser tous les chemins visuels et les labels de distance
         planetConnections.HideAllConnections();
+        planetConnections.HideAllDistanceLabels();
 
         // Créer l'algo et calculer le chemin optimal
         DijkstraAlgorithm algo = new DijkstraAlgorithm(planetConnections.GetPlanetGraph());
@@ -32,40 +38,65 @@ public class CalculatePathButton : MonoBehaviour
             return;
         }
 
+        float totalDistance = 0f;
+        string detailText = "";
+
         // Afficher le chemin optimal visuellement
         for (int i = 0; i < path.Count - 1; i++)
-{
-    GameObject a = path[i];
-    GameObject b = path[i + 1];
-
-    // Trouve la ligne qui correspond à ce lien
-    foreach (var line in planetConnections.GetAllLines())
-    {
-        if (line.TryGetComponent<LineRenderer>(out var lr))
         {
-            Vector3 pos1 = lr.GetPosition(0);
-            Vector3 pos2 = lr.GetPosition(1);
+            GameObject a = path[i];
+            GameObject b = path[i + 1];
 
-            // Vérifie si les positions correspondent (dans un sens ou dans l’autre)
-            bool match = 
-                (ApproximatelyEqual(pos1, a.transform.position) && ApproximatelyEqual(pos2, b.transform.position)) ||
-                (ApproximatelyEqual(pos1, b.transform.position) && ApproximatelyEqual(pos2, a.transform.position));
-
-            if (match)
+            foreach (var line in planetConnections.GetAllLines())
             {
-                lr.enabled = true;
-                lr.material = optimalPathMaterial;
-                break;
+                if (line.TryGetComponent<LineRenderer>(out var lr))
+                {
+                    Vector3 pos1 = lr.GetPosition(0);
+                    Vector3 pos2 = lr.GetPosition(1);
+
+                    bool match =
+                        (ApproximatelyEqual(pos1, a.transform.position) && ApproximatelyEqual(pos2, b.transform.position)) ||
+                        (ApproximatelyEqual(pos1, b.transform.position) && ApproximatelyEqual(pos2, a.transform.position));
+
+                    if (match)
+                    {
+                        lr.enabled = true;
+                        lr.material = optimalPathMaterial;
+                        planetConnections.ShowLabelForConnection(a, b);
+
+                        PlanetConnections.PlanetConnection connection = FindConnection(a, b);
+                        float distance = connection != null ? connection.distance : 0f;
+                        totalDistance += distance;
+
+                        // Ajouter au détail
+                        detailText += a.name + " → " + b.name + " : " + distance.ToString("F1") + " AL ";
+
+                        break;
+                    }
+                }
             }
         }
-    }
-}
 
-
+        // Mise à jour des labels UI
+        totalDistanceLabel.text = "Distance Totale: " + totalDistance.ToString("F1") + " Années Lumières";
+        distanceDetailsLabel.text = detailText;
     }
+
     private bool ApproximatelyEqual(Vector3 a, Vector3 b, float tolerance = 0.1f)
-{
-    return Vector3.Distance(a, b) < tolerance;
-}
+    {
+        return Vector3.Distance(a, b) < tolerance;
+    }
 
+    private PlanetConnections.PlanetConnection FindConnection(GameObject planet1, GameObject planet2)
+    {
+        foreach (var connection in planetConnections.planetConnections)
+        {
+            if ((connection.planet1 == planet1 && connection.planet2 == planet2) ||
+                (connection.planet1 == planet2 && connection.planet2 == planet1))
+            {
+                return connection;
+            }
+        }
+        return null;
+    }
 }

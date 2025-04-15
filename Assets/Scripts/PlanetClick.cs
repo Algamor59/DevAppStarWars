@@ -57,10 +57,10 @@ if (!isSelected)
     void SetStartOrEndPoint()
 {
     // Appliquer le matériau de surbrillance
-    GetComponent<Renderer>().material = highlightMaterial;
+    // GetComponent<Renderer>().material = highlightMaterial;
 
     // Agrandir la planète pour la mettre en évidence
-    transform.localScale *= 1.2f;  // Agrandit de 20%
+    transform.localScale *= 1.8f;  // Agrandit de 20%
 
     isSelected = true;
 
@@ -115,6 +115,7 @@ if (!isSelected)
     // Réafficher toutes les lignes après reset
     if (planetConnections != null)
     {
+        planetConnections.ShowAllDistanceLabels();
         planetConnections.ShowAllLines();
     }
 }
