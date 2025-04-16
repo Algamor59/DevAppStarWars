@@ -1,15 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using JetBrains.Annotations;
 
 public class PlanetConnections : MonoBehaviour
 {
     public List<PlanetConnection> planetConnections = new List<PlanetConnection>();
-    public TextMeshProUGUI totalDistanceLabel; // Le champ où la distance totale sera affichée
-    public TextMeshProUGUI distanceDetailsLabel; // Champ pour le détail
-[SerializeField]
-private float maxConnectionDistance = 8f;
+    public TextMeshProUGUI totalDistanceLabel;
+    public TextMeshProUGUI distanceDetailsLabel;
+
+    [SerializeField] private float maxConnectionDistance = 8f;
+    [SerializeField] [Range(0, 100)] private int connectionChance = 20; // Chance de connexion supplémentaire
+    [SerializeField] private int maxConnectionsPerPlanet = 3; // Connexions max par planète
 
     public GameObject distanceLabelPrefab;
     public Material dottedLineMaterial;
@@ -18,9 +19,8 @@ private float maxConnectionDistance = 8f;
 
     public GameObject asteroidPrefab;
 
-    public Dictionary<GameObject, List<PlanetConnection>> planetGraph = new Dictionary<GameObject, List<PlanetConnection>>(); // Dictionnaire des connexions entre les planètes
+    public Dictionary<GameObject, List<PlanetConnection>> planetGraph = new Dictionary<GameObject, List<PlanetConnection>>();
     private Dictionary<(GameObject, GameObject), GameObject> distanceLabels = new();
-
     private List<GameObject> activeLines = new List<GameObject>();
 
     [System.Serializable]
@@ -36,17 +36,15 @@ private float maxConnectionDistance = 8f;
             if (planet1 != null && planet2 != null)
             {
                 float baseDistance = Vector3.Distance(planet1.transform.position, planet2.transform.position);
-                distance = hasAsteroids ? baseDistance * 2f : baseDistance; //  Si astéroïdes, on double la distance
+                distance = hasAsteroids ? baseDistance * 2f : baseDistance;
             }
         }
     }
 
     void Start()
     {
-        // Génération aléatoire des connexions
         GenerateRandomConnections();
 
-        // Traitement des connexions générées
         foreach (var connection in planetConnections)
         {
             connection.CalculateDistance();
@@ -55,28 +53,70 @@ private float maxConnectionDistance = 8f;
         }
     }
 
-    // Ajouter les connexions au graphe
     void AddConnectionToGraph(PlanetConnection connection)
     {
         if (!planetGraph.ContainsKey(connection.planet1))
-        {
             planetGraph[connection.planet1] = new List<PlanetConnection>();
-        }
         planetGraph[connection.planet1].Add(connection);
 
         if (!planetGraph.ContainsKey(connection.planet2))
-        {
             planetGraph[connection.planet2] = new List<PlanetConnection>();
-        }
         planetGraph[connection.planet2].Add(connection);
     }
+void GenerateMinimumSpanningTree(GameObject[] planets)
+    {
+        List<(GameObject a, GameObject b, float dist)> edges = new();
 
-    // Générer des connexions aléatoires entre les planètes existantes
+        // 1. Générer toutes les paires possibles
+        for (int i = 0; i < planets.Length; i++)
+        {
+            for (int j = i + 1; j < planets.Length; j++)
+            {
+                float dist = Vector3.Distance(planets[i].transform.position, planets[j].transform.position);
+                edges.Add((planets[i], planets[j], dist));
+            }
+        }
+
+        // 2. Trier les connexions par distance
+        edges.Sort((x, y) => x.dist.CompareTo(y.dist));
+
+        // 3. Structure Union-Find pour suivre les groupes connectés
+        Dictionary<GameObject, GameObject> parent = new();
+        foreach (var planet in planets)
+            parent[planet] = planet;
+
+        GameObject Find(GameObject p)
+        {
+            if (parent[p] != p)
+                parent[p] = Find(parent[p]);
+            return parent[p];
+        }
+
+        void Union(GameObject a, GameObject b)
+        {
+            var rootA = Find(a);
+            var rootB = Find(b);
+            if (rootA != rootB)
+                parent[rootB] = rootA;
+        }
+
+        // 4. Appliquer Kruskal
+        foreach (var edge in edges)
+        {
+            if (Find(edge.a) != Find(edge.b))
+            {
+                CreateConnection(edge.a, edge.b); // Ta fonction de connexion actuelle
+                Union(edge.a, edge.b);
+            }
+        }
+    }
    void GenerateRandomConnections()
 {
-    float maxDistance = maxConnectionDistance;
-    GameObject[] planets = GameObject.FindGameObjectsWithTag("Planet");
-    List<GameObject> unconnected = new List<GameObject>(planets);
+        
+
+        GameObject[] planets = GameObject.FindGameObjectsWithTag("Planet");
+        GenerateMinimumSpanningTree(planets);
+        List<GameObject> unconnected = new List<GameObject>(planets);
     List<GameObject> connected = new List<GameObject>();
 
     if (unconnected.Count == 0) return;
@@ -85,59 +125,95 @@ private float maxConnectionDistance = 8f;
     connected.Add(first);
     unconnected.Remove(first);
 
-    while (unconnected.Count > 0)
-    {
-        GameObject from = connected[Random.Range(0, connected.Count)];
-        GameObject to = unconnected[Random.Range(0, unconnected.Count)];
+        int safetyCounter = 0;
+        int maxAttempts = 1000; // ou plus selon le nombre de planètes
 
-        float dist = Vector3.Distance(from.transform.position, to.transform.position);
-        if (dist <= maxDistance && !ConnectionExists(from, to))
+        while (unconnected.Count > 0 && safetyCounter < maxAttempts)
         {
-            CreateConnection(from, to);
-            connected.Add(to);
-            unconnected.Remove(to);
-        }
-    }
+            safetyCounter++;
 
-    // Connexions supplémentaires
-    for (int i = 0; i < planets.Length; i++)
+            GameObject from = connected[Random.Range(0, connected.Count)];
+            GameObject to = unconnected[Random.Range(0, unconnected.Count)];
+
+            float dist = Vector3.Distance(from.transform.position, to.transform.position);
+            if (dist <= maxConnectionDistance && !ConnectionExists(from, to))
+            {
+                CreateConnection(from, to);
+                connected.Add(to);
+                unconnected.Remove(to);
+            }
+        }
+
+        if (unconnected.Count > 0)
+        {
+            Debug.LogWarning("Certaines planètes sont trop éloignées pour être connectées.");
+        }
+
+
+        for (int i = 0; i < planets.Length; i++)
     {
         for (int j = i + 1; j < planets.Length; j++)
         {
-            float dist = Vector3.Distance(planets[i].transform.position, planets[j].transform.position);
-            if (Random.Range(0, 5) == 0 && dist <= maxDistance && !ConnectionExists(planets[i], planets[j]))
+            GameObject a = planets[i];
+            GameObject b = planets[j];
+
+            float dist = Vector3.Distance(a.transform.position, b.transform.position);
+            if (dist <= maxConnectionDistance && !ConnectionExists(a, b))
             {
-                CreateConnection(planets[i], planets[j]);
+                int aCount = GetConnectionCount(a);
+                int bCount = GetConnectionCount(b);
+                if (aCount < maxConnectionsPerPlanet && bCount < maxConnectionsPerPlanet)
+                {
+                    if (Random.Range(0, 100) < connectionChance)
+                    {
+                        CreateConnection(a, b);
+                    }
+                }
             }
         }
     }
 
-    // Vérifier que chaque planète a au moins une connexion
+    // Nouvelle étape : si une planète n’a aucune possibilité de connexion à cause du rayon, on force une avec la plus proche
     foreach (var planet in planets)
     {
-        bool hasConnection = planetConnections.Exists(c => c.planet1 == planet || c.planet2 == planet);
-        if (!hasConnection)
+        bool isConnected = planetConnections.Exists(c => c.planet1 == planet || c.planet2 == planet);
+        if (!isConnected)
         {
-            GameObject other = planets[Random.Range(0, planets.Length)];
-            int maxAttempts = 50;
-            int attempts = 0;
+            GameObject closest = null;
+            float closestDistance = float.MaxValue;
 
-            while ((other == planet || ConnectionExists(planet, other) || Vector3.Distance(planet.transform.position, other.transform.position) > maxDistance) && attempts < maxAttempts)
+            foreach (var other in planets)
             {
-                other = planets[Random.Range(0, planets.Length)];
-                attempts++;
+                if (other == planet) continue;
+                if (ConnectionExists(planet, other)) continue;
+
+                float dist = Vector3.Distance(planet.transform.position, other.transform.position);
+                if (dist < closestDistance)
+                {
+                    closestDistance = dist;
+                    closest = other;
+                }
             }
 
-            if (attempts < maxAttempts)
+            if (closest != null)
             {
-                CreateConnection(planet, other);
-                Debug.LogWarning($"Planète {planet.name} était isolée. Connexion ajoutée avec {other.name}");
-            }
-            else
-            {
-                Debug.LogWarning($"Impossible de connecter la planète {planet.name} après {maxAttempts} tentatives.");
+                CreateConnection(planet, closest);
+
+                // PlanetConnection forcedConnection = new PlanetConnection
+                // {
+                //     planet1 = planet,
+                //     planet2 = closest,
+                //     hasAsteroids = Random.Range(0, 4) == 0
+                // };
+                // planetConnections.Add(forcedConnection);
+                Debug.LogWarning($"Planète {planet.name} était isolée (aucune dans le rayon). Connexion forcée avec {closest.name} à {closestDistance:F1} unités.");
             }
         }
+    }
+
+    int GetConnectionCount(GameObject planet)
+    {
+        return planetConnections.FindAll(c => c.planet1 == planet || c.planet2 == planet).Count;
     }
 
     bool ConnectionExists(GameObject a, GameObject b)
@@ -147,7 +223,9 @@ private float maxConnectionDistance = 8f;
             (c.planet1 == b && c.planet2 == a));
     }
 
-    void CreateConnection(GameObject from, GameObject to)
+}
+
+void CreateConnection(GameObject from, GameObject to)
     {
         PlanetConnection connection = new PlanetConnection
         {
@@ -158,32 +236,6 @@ private float maxConnectionDistance = 8f;
         planetConnections.Add(connection);
     }
 
-
-
-
-        // S'assurer que chaque planète a AU MOINS une connexion
-        foreach (var planet in planets)
-        {
-            if (!connected.Contains(planet))
-            {
-                // Choisir une autre planète aléatoire différente pour connecter
-                GameObject other = planets[Random.Range(0, planets.Length)];
-                while (other == planet) other = planets[Random.Range(0, planets.Length)];
-
-                PlanetConnection fallbackConnection = new PlanetConnection
-                {
-                    planet1 = planet,
-                    planet2 = other,
-                    hasAsteroids = Random.Range(0, 4) == 0
-                };
-
-                planetConnections.Add(fallbackConnection);
-                Debug.LogWarning($"Planète {planet.name} était isolée. Connexion ajoutée avec {other.name}");
-            }
-        }
-    }
-
-    // Fonction pour obtenir les connexions d'une planète
     public List<PlanetConnection> GetConnections(GameObject planet)
     {
         if (planetGraph.ContainsKey(planet))
@@ -191,13 +243,10 @@ private float maxConnectionDistance = 8f;
         return null;
     }
 
-    // Créer une ligne pointillée entre deux planètes
     public void CreateDottedLine(GameObject planet1, GameObject planet2, float distance, bool hasAsteroids)
     {
         GameObject line = new GameObject($"DottedLine_{planet1.name}_{planet2.name}");
         line.transform.SetParent(this.transform);
-
-        Debug.Log($"Création ligne entre {planet1.name} et {planet2.name}");
 
         LineRenderer lineRenderer = line.AddComponent<LineRenderer>();
         lineRenderer.material = dottedLineMaterial;
@@ -209,14 +258,11 @@ private float maxConnectionDistance = 8f;
         lineRenderer.useWorldSpace = true;
         activeLines.Add(line);
 
-        // ➕ Affichage de la distance au milieu
         Vector3 midPoint = (planet1.transform.position + planet2.transform.position) / 2f;
-
         GameObject label = Instantiate(distanceLabelPrefab, midPoint, Quaternion.identity);
         label.transform.SetParent(line.transform);
         label.transform.position = midPoint;
 
-        // ➕ Enregistrer dans le dictionnaire pour pouvoir le retrouver plus tard
         var key = (planet1, planet2);
         var reverseKey = (planet2, planet1);
         if (!distanceLabels.ContainsKey(key) && !distanceLabels.ContainsKey(reverseKey))
@@ -227,31 +273,31 @@ private float maxConnectionDistance = 8f;
         TextMeshProUGUI tmp = label.GetComponentInChildren<TextMeshProUGUI>();
         tmp.text = distance.ToString("F1") + " AL";
 
-        //  Si la ligne a des astéroïdes, passe le texte en orange
         if (hasAsteroids)
         {
-            int asteroidGroupCount = 5; // Crée plusieurs champs d'astéroïdes
-    for (int i = 0; i < asteroidGroupCount; i++)
-    {
-        float t = (i + 1) / (float)(asteroidGroupCount + 1);
-        Vector3 position = Vector3.Lerp(planet1.transform.position, planet2.transform.position, t);
-        position += Random.insideUnitSphere * 0.3f;
+            int asteroidGroupCount = 3;
+            for (int i = 0; i < asteroidGroupCount; i++)
+            {
+                float t = (i + 1) / (float)(asteroidGroupCount + 1);
+                Vector3 position = Vector3.Lerp(planet1.transform.position, planet2.transform.position, t);
+                position += Random.insideUnitSphere * 0.3f;
 
-        GameObject asteroidGroup = Instantiate(asteroidPrefab, position, Random.rotation);
-        asteroidGroup.transform.SetParent(line.transform); // Garde le tout sous la ligne
-        asteroidGroup.transform.localScale = Vector3.one * Random.Range(0.1f, 0.3f);
-    }
-            tmp.color = new Color(1f, 0.4f, 0f); // Plus orange (hex: #FF6600)
+                GameObject asteroidGroup = Instantiate(asteroidPrefab, position, Random.rotation);
+                asteroidGroup.transform.SetParent(line.transform);
+                asteroidGroup.transform.localScale = Vector3.one * Random.Range(0.1f, 0.3f);
+            }
+            tmp.color = new Color(1f, 0.4f, 0f);
         }
         else
         {
-            tmp.color = Color.yellow; // Sinon texte classique en blanc
+            tmp.color = Color.yellow;
         }
 
-        label.AddComponent<FaceCamera>(); // Texte toujours face caméra
+        label.AddComponent<FaceCamera>();
     }
+    
 
-    // Cacher toutes les connexions
+
     public void HideAllConnections()
     {
         cantHide = true;
@@ -266,34 +312,43 @@ private float maxConnectionDistance = 8f;
 
     public void HideAndShowAllConnections()
     {
-        
-        if(!isHidden &&!cantHide){
-           foreach (var line in activeLines)
+        if (!isHidden && !cantHide)
         {
-            if (line.TryGetComponent<LineRenderer>(out var lr))
-            {
-                isHidden = true;
-                lr.enabled = false;
-            }
-        } 
-        }
-        else{
+            isHidden = true;
             foreach (var line in activeLines)
-        {
-            if (line.TryGetComponent<LineRenderer>(out var lr))
-            {   
-                isHidden=false;
-                lr.enabled = true;
+            {
+                if (line.TryGetComponent<LineRenderer>(out var lr))
+                {
+                    lr.enabled = false;
+                }
+            }
+            foreach (var label in distanceLabels.Values)
+            {
+                if (label != null)
+                    label.SetActive(false);
             }
         }
+        else
+        {
+            isHidden = false;
+            foreach (var line in activeLines)
+            {
+                if (line.TryGetComponent<LineRenderer>(out var lr))
+                {
+                    lr.enabled = true;
+                }
+            }
+            foreach (var label in distanceLabels.Values)
+            {
+                if (label != null)
+                    label.SetActive(true);
+            }
         }
-        
     }
 
-    // Afficher toutes les lignes
     public void ShowAllLines()
     {
-        cantHide=false;
+        cantHide = false;
         if (activeLines.Count == 0)
         {
             Debug.LogWarning("Aucune ligne à afficher !");
@@ -309,15 +364,10 @@ private float maxConnectionDistance = 8f;
                     lr.enabled = true;
                     lr.material = dottedLineMaterial;
                 }
-                else
-                {
-                    Debug.LogWarning("Aucun LineRenderer trouvé pour l'objet : " + line.name);
-                }
             }
         }
     }
 
-    // Cacher tous les labels de distance
     public void HideAllDistanceLabels()
     {
         foreach (var label in distanceLabels.Values)
@@ -327,7 +377,6 @@ private float maxConnectionDistance = 8f;
         }
     }
 
-    // Afficher tous les labels de distance
     public void ShowAllDistanceLabels()
     {
         foreach (var label in distanceLabels.Values)
@@ -339,7 +388,6 @@ private float maxConnectionDistance = 8f;
         distanceDetailsLabel.text = "";
     }
 
-    // Afficher le label pour une connexion spécifique
     public void ShowLabelForConnection(GameObject planetA, GameObject planetB)
     {
         var key = (planetA, planetB);
@@ -351,13 +399,11 @@ private float maxConnectionDistance = 8f;
             distanceLabels[reverseKey].SetActive(true);
     }
 
-    // Obtenir toutes les lignes
     public List<GameObject> GetAllLines()
     {
         return activeLines;
     }
 
-    // Obtenir le graphe des planètes
     public Dictionary<GameObject, List<PlanetConnection>> GetPlanetGraph()
     {
         return planetGraph;

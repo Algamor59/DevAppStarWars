@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class CalculatePathButton : MonoBehaviour
 {
@@ -10,19 +11,22 @@ public class CalculatePathButton : MonoBehaviour
 
     public TextMeshProUGUI distanceDetailsLabel; // Champ pour le détail
 
-
+    public Image EasterImage;          // Image du cockpit (AFK ou en activité)
+    public Sprite updateEaster;
     void Start()
     {
         planetConnections = FindObjectOfType<PlanetConnections>();
     }
 
     public void CalculatePath()
-{
+{int nbPlanets =1;
+
     if (PlanetClick.startPoint == null || PlanetClick.endPoint == null)
     {
         Debug.LogWarning("Sélectionnez une planète de départ et une d'arrivée.");
         return;
     }
+    EasterImage.sprite = updateEaster;
 
     // Vérifier si les planètes sont dans le graphe
     Debug.Log($"Start point: {PlanetClick.startPoint.name}, End point: {PlanetClick.endPoint.name}");
@@ -46,7 +50,7 @@ public class CalculatePathButton : MonoBehaviour
 
     // Afficher le chemin optimal visuellement
     for (int i = 0; i < path.Count - 1; i++)
-    {
+    {   
         GameObject a = path[i];
         GameObject b = path[i + 1];
 
@@ -75,9 +79,9 @@ public class CalculatePathButton : MonoBehaviour
 
                     float distance = connection != null ? connection.distance : 0f;
                     totalDistance += distance;
-
+                    nbPlanets++;
                     // Ajouter au détail
-                    detailText += a.name + " → " + b.name + " : " + distance.ToString("F1") + " AL ";
+                    detailText += distance.ToString("F1")+" ";
 
                     break;
                 }
@@ -87,6 +91,7 @@ public class CalculatePathButton : MonoBehaviour
 
     // Mise à jour des labels UI
     totalDistanceLabel.text = "Distance Totale: " + totalDistance.ToString("F1") + " Années Lumières";
+    detailText+=  " AL " + "Nombre de planètes traversée : "+nbPlanets;
     distanceDetailsLabel.text = detailText;
 }
 

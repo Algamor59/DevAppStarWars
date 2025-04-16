@@ -1,11 +1,13 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlanetClick : MonoBehaviour
 {
     public Material highlightMaterial;  // Matériau de surbrillance pour la planète
     private Material originalMaterial;   // Matériau original de la planète
-
+    public Image EasterImage;          // Image du cockpit (AFK ou en activité)
+    
     public Material dottedLineMaterial;
     private bool isSelected = false;    // Indicateur pour savoir si la planète est sélectionnée
 public PlanetConnections planetConnections;
@@ -16,6 +18,10 @@ public PlanetConnections planetConnections;
     private Vector3 initialScale; 
     void Start()
     {
+        UIManager.Instance.choixText.text = "Planète de départ :" + 
+    (startPoint ? startPoint.name : "non définie") + 
+    " 					Planète d'arrivée : " + 
+    (endPoint ? endPoint.name : "non définie");
         // planetConnections = FindObjectOfType<PlanetConnections>();
     }
 
@@ -81,6 +87,11 @@ if (!isSelected)
         Debug.Log("Les deux points sont déjà définis !");
         ResetPlanetVisuals(); // On réinitialise cette planète si les deux points sont déjà définis
     }
+    UIManager.Instance.choixText.text = "Planète de départ : " + 
+    (startPoint ? startPoint.name : "non définie") + 
+    " 					Planète d'arrivée : " + 
+    (endPoint ? endPoint.name : "non définie");
+
 }
 
     void ResetPlanetVisuals()
@@ -106,7 +117,7 @@ if (!isSelected)
 {
     startPoint = null;
     endPoint = null;
-
+    EasterImage.sprite= null;
     // Réinitialiser les visuels des planètes sélectionnées
     foreach (var planet in FindObjectsOfType<PlanetClick>())
     {

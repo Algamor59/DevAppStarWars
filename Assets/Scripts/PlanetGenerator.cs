@@ -5,8 +5,10 @@ using System.IO;
 
 public class PlanetGenerator : MonoBehaviour
 {
+    private Texture2D[] planetTextures;
+
     public GameObject planetPrefab;
-    public int numberOfPlanets = 50;
+    public int numberOfPlanets = 300;
     public float radius = 4f;
     public float minDistanceBetweenPlanets = 0.3f;
 
@@ -18,10 +20,48 @@ public class PlanetGenerator : MonoBehaviour
         LoadPlanetData();
                     Debug.Log("Load Planet Data !");
 
+        planetTextures = Resources.LoadAll<Texture2D>("PlanetTextures");
+        Debug.Log("Textures chargées : " + planetTextures.Length);
+
         GeneratePlanets();
                     Debug.Log("GeneratePlanets !");
 
     }
+//     void MarkIsolatedPlanets(float maxConnectionDistance)
+// {
+//     GameObject[] allPlanets = GameObject.FindGameObjectsWithTag("Planet");
+
+//     foreach (GameObject planet in allPlanets)
+//     {
+//         Vector3 posA = planet.transform.position;
+//         bool hasNeighbor = false;
+
+//         foreach (GameObject other in allPlanets)
+//         {
+//             if (planet == other) continue;
+
+//             float distance = Vector3.Distance(posA, other.transform.position);
+//             if (distance <= maxConnectionDistance)
+//             {
+//                 hasNeighbor = true;
+//                 break;
+//             }
+//         }
+
+//         if (!hasNeighbor)
+//         {
+//             // 💥 La planète est isolée !
+//             planet.name += " (Isolée)";
+//             Renderer rend = planet.GetComponent<Renderer>();
+//             if (rend != null)
+//             {
+//                 rend.material.color = Color.red; // la rendre visuellement rouge 🔴
+//             }
+//             Debug.Log($"Planète isolée détectée : {planet.name}");
+//         }
+//     }
+// }
+
 
     void LoadPlanetData()
     {
@@ -91,6 +131,13 @@ public class PlanetGenerator : MonoBehaviour
         {
             Vector3 position = planetPositions[i];
             GameObject planet = Instantiate(planetPrefab, position, Quaternion.identity);
+            Renderer renderer = planet.GetComponent<Renderer>();
+            if (renderer != null && planetTextures.Length > 0)
+            {
+                int randomIndex = Random.Range(0, planetTextures.Length);
+                renderer.material.mainTexture = planetTextures[randomIndex];
+            }
+
             planet.tag = "Planet";
             planet.name = planetNames[i];
         }
@@ -115,6 +162,13 @@ public class PlanetGenerator : MonoBehaviour
             if (attempts < maxAttempts)
             {
                 GameObject planet = Instantiate(planetPrefab, position, Quaternion.identity);
+                Renderer renderer = planet.GetComponent<Renderer>();
+                if (renderer != null && planetTextures.Length > 0)
+                {
+                    int randomIndex = Random.Range(0, planetTextures.Length);
+                    renderer.material.mainTexture = planetTextures[randomIndex];
+                }
+
                 planet.tag = "Planet";
                 planet.name = "Planète" + (i + 1);
 
@@ -153,6 +207,7 @@ public class PlanetGenerator : MonoBehaviour
         return false;
     }
 }
+
 
 // GeoJSON classes
 public class GeoJson

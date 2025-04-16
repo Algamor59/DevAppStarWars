@@ -191,6 +191,81 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &44635132
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 44635133}
+  - component: {fileID: 44635135}
+  - component: {fileID: 44635134}
+  m_Layer: 5
+  m_Name: EasterEgg
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &44635133
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 44635132}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1966655866}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -180}
+  m_SizeDelta: {x: 80, y: 40}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &44635134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 44635132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &44635135
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 44635132}
+  m_CullTransparentMesh: 1
 --- !u!1 &65965813
 GameObject:
   m_ObjectHideFlags: 0
@@ -248,7 +323,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Reinitialiser
+  m_text: "Reinitialiser la S\xE9lection"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c0ab1f0ae14a845478c45f7b53cc5f5a, type: 2}
   m_sharedMaterial: {fileID: -6859515505585069291, guid: c0ab1f0ae14a845478c45f7b53cc5f5a, type: 2}
@@ -337,6 +412,8 @@ GameObject:
   - component: {fileID: 71723155}
   - component: {fileID: 71723157}
   - component: {fileID: 71723158}
+  - component: {fileID: 71723159}
+  - component: {fileID: 71723160}
   m_Layer: 0
   m_Name: CursorManager
   m_TagString: Untagged
@@ -388,7 +465,9 @@ MonoBehaviour:
   planetConnections: []
   totalDistanceLabel: {fileID: 579944086}
   distanceDetailsLabel: {fileID: 2055621932}
-  maxConnectionDistance: 8
+  maxConnectionDistance: 5
+  connectionChance: 10
+  maxConnectionsPerPlanet: 3
   distanceLabelPrefab: {fileID: 4801038643069215419, guid: cc06dd9cf93e04944ac2e384d92e3fe3, type: 3}
   dottedLineMaterial: {fileID: 2100000, guid: 705040f156e610d469b9ad4527aacfed, type: 2}
   isHidden: 0
@@ -406,9 +485,172 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   planetPrefab: {fileID: 8456051952230746827, guid: e2a63f619baa2e1488d2ac5161abcc5a, type: 3}
-  numberOfPlanets: 80
-  radius: 15
+  numberOfPlanets: 200
+  radius: 20
   minDistanceBetweenPlanets: 3
+--- !u!114 &71723159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 71723154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4dc2ec1f844e7945965f3694ed9d146, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightMaterial: {fileID: 2100000, guid: 1e3a13ba1a6d4b248b79083619781841, type: 2}
+  EasterImage: {fileID: 44635134}
+  dottedLineMaterial: {fileID: 2100000, guid: e66c9437f9fdf9e49801589167f65dd6, type: 2}
+  planetConnections: {fileID: 71723157}
+--- !u!114 &71723160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 71723154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d31cf8173cead24c8f02ef6f7c58eab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  choixText: {fileID: 409286375}
+--- !u!1 &409286373
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 409286374}
+  - component: {fileID: 409286376}
+  - component: {fileID: 409286375}
+  m_Layer: 0
+  m_Name: Planeteschoisies
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &409286374
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 409286373}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1966655866}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 2, y: 464}
+  m_SizeDelta: {x: -1720, y: -980}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &409286375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 409286373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: "Planete de d\xE9part : \t\t\t\t\tPlanete d'arriv\xE9e :"
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: c0ab1f0ae14a845478c45f7b53cc5f5a, type: 2}
+  m_sharedMaterial: {fileID: -6859515505585069291, guid: c0ab1f0ae14a845478c45f7b53cc5f5a, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4278253823
+  m_fontColor: {r: 1, g: 0.97232103, b: 0, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 20
+  m_fontSizeBase: 20
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 1
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: -795.29926, y: 0, z: -759.7066, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &409286376
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 409286373}
+  m_CullTransparentMesh: 1
 --- !u!1 &496967511
 GameObject:
   m_ObjectHideFlags: 0
@@ -667,6 +909,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlightMaterial: {fileID: 2100000, guid: 1e3a13ba1a6d4b248b79083619781841, type: 2}
+  EasterImage: {fileID: 0}
   dottedLineMaterial: {fileID: 2100000, guid: e66c9437f9fdf9e49801589167f65dd6, type: 2}
   planetConnections: {fileID: 0}
 --- !u!135 &597953712
@@ -903,6 +1146,8 @@ MonoBehaviour:
   optimalPathMaterial: {fileID: 2100000, guid: 5362e24ffd4a7f54fa8edc40d48247ef, type: 2}
   totalDistanceLabel: {fileID: 579944086}
   distanceDetailsLabel: {fileID: 2055621932}
+  EasterImage: {fileID: 44635134}
+  updateEaster: {fileID: 21300000, guid: 648a4e6c396787049b46e12675d46ec3, type: 3}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1288,6 +1533,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlightMaterial: {fileID: 2100000, guid: 1e3a13ba1a6d4b248b79083619781841, type: 2}
+  EasterImage: {fileID: 0}
   dottedLineMaterial: {fileID: 2100000, guid: e66c9437f9fdf9e49801589167f65dd6, type: 2}
   planetConnections: {fileID: 0}
 --- !u!114 &843558952
@@ -1464,6 +1710,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlightMaterial: {fileID: 2100000, guid: 1e3a13ba1a6d4b248b79083619781841, type: 2}
+  EasterImage: {fileID: 0}
   dottedLineMaterial: {fileID: 2100000, guid: e66c9437f9fdf9e49801589167f65dd6, type: 2}
   planetConnections: {fileID: 0}
 --- !u!135 &1027783758
@@ -1635,7 +1882,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1913178443}
+      - m_Target: {fileID: 71723159}
         m_TargetAssemblyTypeName: PlanetClick, Assembly-CSharp
         m_MethodName: ResetSelection
         m_Mode: 1
@@ -1805,6 +2052,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlightMaterial: {fileID: 2100000, guid: 1e3a13ba1a6d4b248b79083619781841, type: 2}
+  EasterImage: {fileID: 0}
   dottedLineMaterial: {fileID: 2100000, guid: e66c9437f9fdf9e49801589167f65dd6, type: 2}
   planetConnections: {fileID: 0}
 --- !u!114 &1190392980
@@ -1960,17 +2208,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7125188717501520501, guid: e2a63f619baa2e1488d2ac5161abcc5a, type: 3}
   m_PrefabInstance: {fileID: 2463980679127058578}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1913178443 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1084864331941076514, guid: e2a63f619baa2e1488d2ac5161abcc5a, type: 3}
-  m_PrefabInstance: {fileID: 2463980679127058578}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4dc2ec1f844e7945965f3694ed9d146, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1923761956
 GameObject:
   m_ObjectHideFlags: 0
@@ -2203,7 +2440,9 @@ RectTransform:
   - {fileID: 1923761957}
   - {fileID: 1151119670}
   - {fileID: 579944085}
+  - {fileID: 409286374}
   - {fileID: 2055621931}
+  - {fileID: 44635133}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2465,6 +2704,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlightMaterial: {fileID: 2100000, guid: 1e3a13ba1a6d4b248b79083619781841, type: 2}
+  EasterImage: {fileID: 0}
   dottedLineMaterial: {fileID: 2100000, guid: e66c9437f9fdf9e49801589167f65dd6, type: 2}
   planetConnections: {fileID: 0}
 --- !u!114 &2094991923
@@ -2489,6 +2729,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 751525262}
     m_Modifications:
+    - target: {fileID: 1084864331941076514, guid: e2a63f619baa2e1488d2ac5161abcc5a, type: 3}
+      propertyPath: choixText
+      value: 
+      objectReference: {fileID: 409286375}
+    - target: {fileID: 1084864331941076514, guid: e2a63f619baa2e1488d2ac5161abcc5a, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1084864331941076514, guid: e2a63f619baa2e1488d2ac5161abcc5a, type: 3}
+      propertyPath: ChoixImages
+      value: 
+      objectReference: {fileID: 409286375}
+    - target: {fileID: 1084864331941076514, guid: e2a63f619baa2e1488d2ac5161abcc5a, type: 3}
+      propertyPath: EasterImage
+      value: 
+      objectReference: {fileID: 44635134}
     - target: {fileID: 1084864331941076514, guid: e2a63f619baa2e1488d2ac5161abcc5a, type: 3}
       propertyPath: planetConnections
       value: 
@@ -2537,7 +2793,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tatooine
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1084864331941076514, guid: e2a63f619baa2e1488d2ac5161abcc5a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
