@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CameraController : MonoBehaviour
 {
@@ -9,6 +10,13 @@ public class CameraController : MonoBehaviour
 
     private Vector3 moveDirection;
     private Camera camera;
+
+    // Références aux images du cockpit
+    public Image cockpitImage;          // Image du cockpit (AFK ou en activité)
+    public Sprite cockpitAFK;           // Sprite du cockpit en mode AFK
+    public Sprite cockpitActive;        // Sprite du cockpit en mode activité
+
+    private bool isMoving = false;      // Indicateur pour savoir si la caméra est en mouvement
 
     void Start()
     {
@@ -47,5 +55,32 @@ public class CameraController : MonoBehaviour
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         camera.fieldOfView -= scroll * zoomSpeed;
         camera.fieldOfView = Mathf.Clamp(camera.fieldOfView, 10f, 80f);
+
+        // Vérifier si la caméra est en mouvement
+        if (moveDirection.magnitude > 0)
+        {
+            if (!isMoving)
+            {
+                isMoving = true;
+                UpdateCockpitImage(true); // Changer l'image du cockpit en activité
+            }
+        }
+        else
+        {
+            if (isMoving)
+            {
+                isMoving = false;
+                UpdateCockpitImage(false); // Remettre l'image du cockpit en mode AFK
+            }
+        }
+    }
+
+    // Méthode pour changer l'image du cockpit
+    private void UpdateCockpitImage(bool isActive)
+    {
+        if (cockpitImage != null)
+        {
+            cockpitImage.sprite = isActive ? cockpitActive : cockpitAFK;
+        }
     }
 }

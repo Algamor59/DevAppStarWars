@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlanetClick : MonoBehaviour
@@ -7,7 +8,7 @@ public class PlanetClick : MonoBehaviour
 
     public Material dottedLineMaterial;
     private bool isSelected = false;    // Indicateur pour savoir si la planète est sélectionnée
-    private PlanetConnections planetConnections;
+public PlanetConnections planetConnections;
     public static GameObject lineBetweenPoints; 
 
     public static GameObject startPoint;  // Point de départ (statique pour qu'il soit accessible globalement)
@@ -15,7 +16,7 @@ public class PlanetClick : MonoBehaviour
     private Vector3 initialScale; 
     void Start()
     {
-        planetConnections = FindObjectOfType<PlanetConnections>();
+        // planetConnections = FindObjectOfType<PlanetConnections>();
     }
 
 
@@ -57,10 +58,10 @@ if (!isSelected)
     void SetStartOrEndPoint()
 {
     // Appliquer le matériau de surbrillance
-    // GetComponent<Renderer>().material = highlightMaterial;
+    GetComponent<Renderer>().material = highlightMaterial;
 
     // Agrandir la planète pour la mettre en évidence
-    transform.localScale *= 1.8f;  // Agrandit de 20%
+    transform.localScale *= 1.8f;  // Agrandit x%
 
     isSelected = true;
 
@@ -117,6 +118,9 @@ if (!isSelected)
     {
         planetConnections.ShowAllDistanceLabels();
         planetConnections.ShowAllLines();
+    }
+    else{
+        Debug.Log("pas de planet connections");
     }
 }
 
