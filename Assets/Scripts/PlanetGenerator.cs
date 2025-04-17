@@ -1,15 +1,20 @@
-// PlanetGenerator.cs
 using UnityEngine;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.IO;
 using System.Collections;
+using TMPro;
+using UnityEngine.UI;
 
 public class PlanetGenerator : MonoBehaviour
 {
     private Texture2D[] planetTextures;
 
     public GameObject planetPrefab;
+
+    [SerializeField] private TextMeshProUGUI progressLabel;
+    [SerializeField] private Slider progressBar;
+
     public int numberOfPlanets = 300;
     public float radius = 4f;
     public float minDistanceBetweenPlanets = 0.3f;
@@ -28,7 +33,7 @@ public class PlanetGenerator : MonoBehaviour
         planetTextures = Resources.LoadAll<Texture2D>("PlanetTextures");
         Debug.Log("Textures chargées : " + planetTextures.Length);
 
-        StartCoroutine(GeneratePlanets()); // Coroutine ici
+        StartCoroutine(GeneratePlanets());
     }
 
     void LoadPlanetData()
@@ -44,11 +49,11 @@ public class PlanetGenerator : MonoBehaviour
 
             foreach (var feature in geoJson.features)
             {
-                if (feature == null 
-                    || feature.properties == null 
+                if (feature == null
+                    || feature.properties == null
                     || string.IsNullOrEmpty(feature.properties.name)
-                    || feature.geometry == null 
-                    || feature.geometry.coordinates == null 
+                    || feature.geometry == null
+                    || feature.geometry.coordinates == null
                     || feature.geometry.coordinates.Count < 3)
                 {
                     continue;
@@ -77,8 +82,17 @@ public class PlanetGenerator : MonoBehaviour
             yield break;
         }
 
-        // Générer les planètes du GeoJSON
-        for (int i = 0; i < planetPositions.Count && i < numberOfPlanets; i++)
+        // Initialisation de la barre
+        progressBar.gameObject.SetActive(true);
+        progressLabel.gameObject.SetActive(true);
+
+        int geoJsonCount = Mathf.Min(planetPositions.Count, numberOfPlanets);
+        int randomCount = Mathf.Max(0, numberOfPlanets - geoJsonCount);
+        int totalToGenerate = geoJsonCount + randomCount;
+        int currentProgress = 0;
+
+        // Génération à partir du GeoJSON
+        for (int i = 0; i < geoJsonCount; i++)
         {
             Vector3 position = planetPositions[i];
             GameObject planet = Instantiate(planetPrefab, position, Quaternion.identity);
@@ -93,11 +107,14 @@ public class PlanetGenerator : MonoBehaviour
             planet.tag = "Planet";
             planet.name = planetNames[i];
 
+            currentProgress++;
+            UpdateProgressUI(currentProgress, totalToGenerate);
+
             if (i % 10 == 0) yield return null;
         }
 
-        // Générer des planètes aléatoires supplémentaires
-        for (int i = planetPositions.Count; i < numberOfPlanets; i++)
+        // Génération aléatoire
+        for (int i = 0; i < randomCount; i++)
         {
             Vector3 position;
             int attempts = 0;
@@ -111,13 +128,14 @@ public class PlanetGenerator : MonoBehaviour
                 position = randomDirection * Random.Range(radius * 0.5f, radius);
                 attempts++;
             }
-            while ((!IsCloseToOthers(position, maxDistanceFromOthers) 
-                   || IsTooCloseToOthers(position, minDistanceBetweenPlanets)) 
-                  && attempts < maxAttempts);
+            while ((!IsCloseToOthers(position, maxDistanceFromOthers)
+                    || IsTooCloseToOthers(position, minDistanceBetweenPlanets))
+                   && attempts < maxAttempts);
 
             if (attempts < maxAttempts)
             {
                 GameObject planet = Instantiate(planetPrefab, position, Quaternion.identity);
+
                 Renderer renderer = planet.GetComponent<Renderer>();
                 if (renderer != null && planetTextures.Length > 0)
                 {
@@ -126,7 +144,7 @@ public class PlanetGenerator : MonoBehaviour
                 }
 
                 planet.tag = "Planet";
-                planet.name = "Planète" + (i + 1);
+                planet.name = "Planète" + (geoJsonCount + i + 1);
 
                 planetPositions.Add(position);
                 planetNames.Add(planet.name);
@@ -136,18 +154,30 @@ public class PlanetGenerator : MonoBehaviour
                 Debug.LogWarning("Impossible de placer une planète après plusieurs tentatives.");
             }
 
+            currentProgress++;
+            UpdateProgressUI(currentProgress, totalToGenerate);
+
             if (i % 10 == 0) yield return null;
         }
 
         Debug.Log("Toutes les planètes ont été générées !");
 
-        // Appel de la méthode pour générer les connexions après génération complète
+        // Cacher la barre une fois terminé
+        progressBar.gameObject.SetActive(false);
+        progressLabel.gameObject.SetActive(false);
+
         OnPlanetsGenerated();
+    }
+
+    void UpdateProgressUI(int current, int total)
+    {
+        float progress = (float)current / total;
+        progressBar.value = progress;
+        progressLabel.text = $"Génération des planètes : {(int)(progress * 100)}%";
     }
 
     void OnPlanetsGenerated()
     {
-        // Déclenche la génération des connexions
         FindObjectOfType<PlanetConnections>().InitializeConnections();
     }
 
