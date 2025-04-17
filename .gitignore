@@ -24,15 +24,6 @@
 # VS Code
 .vscode/
 .vs/
-*.cubemap
-*.exe
-*.dll
-*.sdf
-*.user
-*.csproj
-*.unityproj
-*.suo
-
 
 # OS
 .DS_Store
