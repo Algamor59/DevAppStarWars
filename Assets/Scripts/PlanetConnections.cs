@@ -43,6 +43,8 @@ public class PlanetConnections : MonoBehaviour
 
     void Start()
     {
+        maxConnectionsPerPlanet = PlayerPrefs.GetInt("MaxConnections");
+        maxConnectionDistance = PlayerPrefs.GetFloat("MaxPathLength");
         GenerateRandomConnections();
 
         foreach (var connection in planetConnections)

@@ -6,7 +6,7 @@ public class PlanetClick : MonoBehaviour
 {
     public Material highlightMaterial;  // Matériau de surbrillance pour la planète
     private Material originalMaterial;   // Matériau original de la planète
-    public Image EasterImage;          // Image du cockpit (AFK ou en activité)
+    public Image EasterImage;          
     
     public Material dottedLineMaterial;
     private bool isSelected = false;    // Indicateur pour savoir si la planète est sélectionnée
@@ -18,10 +18,10 @@ public PlanetConnections planetConnections;
     private Vector3 initialScale; 
     void Start()
     {
-        UIManager.Instance.choixText.text = "Planète de départ : " + 
-    (startPoint ? startPoint.name : "non définie") + 
-    " 					Planète d'arrivée : " + 
-    (endPoint ? endPoint.name : "non définie");
+    //     UIManager.Instance.choixText.text = "Planète de départ : " + 
+    // (startPoint ? startPoint.name : "non définie") + 
+    // " 					Planète d'arrivée : " + 
+    // (endPoint ? endPoint.name : "non définie");
         // planetConnections = FindObjectOfType<PlanetConnections>();
     }
 
@@ -117,7 +117,8 @@ if (!isSelected)
 {
     startPoint = null;
     endPoint = null;
-    EasterImage.sprite= null;
+    EasterImage.gameObject.SetActive(false);
+    // EasterImage.texture= null;
     // Réinitialiser les visuels des planètes sélectionnées
     foreach (var planet in FindObjectsOfType<PlanetClick>())
     {

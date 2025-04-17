@@ -15,7 +15,7 @@ public class CalculatePathButton : MonoBehaviour
 
     public TextMeshProUGUI distanceDetailsLabel; // Champ pour le détail
     public Image EasterImage;          // Image du cockpit (AFK ou en activité)
-    public Sprite updateEaster;
+    public RenderTexture updateEaster;
 
     void Start()
     {
@@ -30,7 +30,8 @@ public class CalculatePathButton : MonoBehaviour
             return;
         }
 
-        EasterImage.sprite = updateEaster;
+        // EasterImage.texture = updateEaster;
+        EasterImage.gameObject.SetActive(true);
         planetConnections.HideAllConnections();
         planetConnections.HideAllDistanceLabels();
 

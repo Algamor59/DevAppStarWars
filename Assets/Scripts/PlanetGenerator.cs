@@ -9,7 +9,9 @@ public class PlanetGenerator : MonoBehaviour
 
     public GameObject planetPrefab;
     public int numberOfPlanets = 300;
+    
     public float radius = 4f;
+    
     public float minDistanceBetweenPlanets = 0.3f;
 
     private List<string> planetNames = new List<string>();
@@ -17,6 +19,9 @@ public class PlanetGenerator : MonoBehaviour
 
     void Start()
     {
+        numberOfPlanets = PlayerPrefs.GetInt("NumberOfPlanets");
+    radius = PlayerPrefs.GetFloat("SpawnRadius");
+
         LoadPlanetData();
                     Debug.Log("Load Planet Data !");
 
@@ -65,15 +70,16 @@ public class PlanetGenerator : MonoBehaviour
 
     void LoadPlanetData()
     {
-        string jsonPath = "Assets/planetGeojson.geojson";
-                    Debug.Log("Path trouvé !");
+        // string jsonPath = "Assets/planetGeojson.geojson";
+        // string jsonPath = Path.Combine(Application.streamingAssetsPath, "planetGeojson.geojson");
+        string jsonPath = Path.Combine(Application.streamingAssetsPath, "planetGeojson.geojson");
+    Debug.Log("Chemin complet : " + jsonPath); // Ajout du debug
 
         if (File.Exists(jsonPath))
         
-        {            Debug.Log("FileExisting");
+        {          
 
             string jsonContent = File.ReadAllText(jsonPath);
-                        Debug.Log("ReadAllText !");
 
             GeoJson geoJson = JsonConvert.DeserializeObject<GeoJson>(jsonContent);
             Debug.Log("Chargement du GeoJSON réussi !");
