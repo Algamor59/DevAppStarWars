@@ -19,6 +19,7 @@
 *.svd
 *.user
 *.userprefs
+*.cubemap
 
 # VS Code
 .vscode/
