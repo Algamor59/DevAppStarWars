@@ -1,0 +1,216 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Tatooine"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [1.4, 2.5, 3.2]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Alderaan"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [5.6, -4.3, 2.1]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Hoth"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [-3.1, 1.8, -5.2]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Endor"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [2.7, -4.5, -6.3]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Coruscant"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [7.4, 3.2, 1.6]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Dagobah"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [-6.5, 3.1, -5.9]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Mustafar"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [4.3, -7.8, -3.4]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Jakku"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [2.1, 6.7, -7.5]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Kessel"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [8.2, 2.9, -1.3]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Sullust"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [-4.2, -6.0, 2.4]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Bespin"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [3.6, 7.3, 1.8]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Yavin IV"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [6.3, -3.8, -2.5]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Lothal"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [-7.1, 2.4, 6.0]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Dantooine"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [0.7, 4.5, 5.8]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Naboo"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [5.9, 3.4, -0.5]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Geonosis"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [-2.9, -1.1, -7.0]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Ryloth"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [3.4, -6.1, 6.5]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Togruta"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [6.8, 2.2, -3.4]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Muunilinst"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [7.1, -4.2, 1.1]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Naboo"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [-6.3, 5.2, 0.9]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "name": "Mandalore"
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [1.1, -2.0, -4.3]
+        }
+      }
+    ]
+  }
+  
