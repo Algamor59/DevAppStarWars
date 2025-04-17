@@ -18,7 +18,7 @@ public PlanetConnections planetConnections;
     private Vector3 initialScale; 
     void Start()
     {
-        UIManager.Instance.choixText.text = "Planète de départ :" + 
+        UIManager.Instance.choixText.text = "Planète de départ : " + 
     (startPoint ? startPoint.name : "non définie") + 
     " 					Planète d'arrivée : " + 
     (endPoint ? endPoint.name : "non définie");
