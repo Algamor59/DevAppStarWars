@@ -23,6 +23,7 @@
 
 # VS Code
 .vscode/
+.vs/
 
 # OS
 .DS_Store
